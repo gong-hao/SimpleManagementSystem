@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Title" Type="int" Nullable="false" />
+          <Property Name="StartWorkingDate" Type="datetime" />
+          <Property Name="LeaveWorkingDate" Type="datetime" />
+          <Property Name="Salary" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="IsOnJob" Type="bit" Nullable="false" />
+          <Property Name="Memo" Type="nvarchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="LeaveLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="Hours" Type="float" Nullable="false" />
+          <Property Name="LeaveType" Type="int" Nullable="false" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="IsApproval" Type="bit" Nullable="false" />
+          <Property Name="ApprovalDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MonthlySalary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="MonthSalary" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="WorkHours" Type="float" Nullable="false" />
+          <Property Name="LeaveHours" Type="float" Nullable="false" />
+          <Property Name="Payday" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SalaryLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="EmployeeId" Type="int" />
+          <Property Name="BeforeSalary" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="AfterSalary" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="1000" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_LeaveLog_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="LeaveLog" Type="Self.LeaveLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LeaveLog">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlySalary_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="MonthlySalary" Type="Self.MonthlySalary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MonthlySalary">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalaryLog_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="SalaryLog" Type="Self.SalaryLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SalaryLog">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBModelStoreContainer">
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LeaveLog" EntityType="Self.LeaveLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonthlySalary" EntityType="Self.MonthlySalary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalaryLog" EntityType="Self.SalaryLog" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_LeaveLog_Employee" Association="Self.FK_LeaveLog_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="LeaveLog" EntitySet="LeaveLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlySalary_Employee" Association="Self.FK_MonthlySalary_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="MonthlySalary" EntitySet="MonthlySalary" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalaryLog_Employee" Association="Self.FK_SalaryLog_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="SalaryLog" EntitySet="SalaryLog" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Title" Type="Int32" Nullable="false" />
+          <Property Name="StartWorkingDate" Type="DateTime" Precision="3" />
+          <Property Name="LeaveWorkingDate" Type="DateTime" Precision="3" />
+          <Property Name="Salary" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="IsOnJob" Type="Boolean" Nullable="false" />
+          <Property Name="Memo" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LeaveLog" Relationship="Self.FK_LeaveLog_Employee" FromRole="Employee" ToRole="LeaveLog" />
+          <NavigationProperty Name="MonthlySalary" Relationship="Self.FK_MonthlySalary_Employee" FromRole="Employee" ToRole="MonthlySalary" />
+          <NavigationProperty Name="SalaryLog" Relationship="Self.FK_SalaryLog_Employee" FromRole="Employee" ToRole="SalaryLog" />
+        </EntityType>
+        <EntityType Name="LeaveLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="Hours" Type="Double" Nullable="false" />
+          <Property Name="LeaveType" Type="Int32" Nullable="false" />
+          <Property Name="Reason" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsApproval" Type="Boolean" Nullable="false" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_LeaveLog_Employee" FromRole="LeaveLog" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="MonthlySalary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="MonthSalary" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="WorkHours" Type="Double" Nullable="false" />
+          <Property Name="LeaveHours" Type="Double" Nullable="false" />
+          <Property Name="Payday" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_MonthlySalary_Employee" FromRole="MonthlySalary" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="SalaryLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeId" Type="Int32" />
+          <Property Name="BeforeSalary" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="AfterSalary" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="Reason" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_SalaryLog_Employee" FromRole="SalaryLog" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_LeaveLog_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="LeaveLog" Type="Self.LeaveLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LeaveLog">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MonthlySalary_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="MonthlySalary" Type="Self.MonthlySalary" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MonthlySalary">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalaryLog_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="SalaryLog" Type="Self.SalaryLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SalaryLog">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Employee" EntityType="Self.Employee" />
+          <EntitySet Name="LeaveLog" EntityType="Self.LeaveLog" />
+          <EntitySet Name="MonthlySalary" EntityType="Self.MonthlySalary" />
+          <EntitySet Name="SalaryLog" EntityType="Self.SalaryLog" />
+          <AssociationSet Name="FK_LeaveLog_Employee" Association="Self.FK_LeaveLog_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="LeaveLog" EntitySet="LeaveLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MonthlySalary_Employee" Association="Self.FK_MonthlySalary_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="MonthlySalary" EntitySet="MonthlySalary" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalaryLog_Employee" Association="Self.FK_SalaryLog_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="SalaryLog" EntitySet="SalaryLog" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBModelStoreContainer" CdmEntityContainer="DBEntities">
+          <EntitySetMapping Name="Employee">
+            <EntityTypeMapping TypeName="DBModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="StartWorkingDate" ColumnName="StartWorkingDate" />
+                <ScalarProperty Name="LeaveWorkingDate" ColumnName="LeaveWorkingDate" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+                <ScalarProperty Name="IsOnJob" ColumnName="IsOnJob" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LeaveLog">
+            <EntityTypeMapping TypeName="DBModel.LeaveLog">
+              <MappingFragment StoreEntitySet="LeaveLog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Hours" ColumnName="Hours" />
+                <ScalarProperty Name="LeaveType" ColumnName="LeaveType" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="IsApproval" ColumnName="IsApproval" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MonthlySalary">
+            <EntityTypeMapping TypeName="DBModel.MonthlySalary">
+              <MappingFragment StoreEntitySet="MonthlySalary">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="MonthSalary" ColumnName="MonthSalary" />
+                <ScalarProperty Name="WorkHours" ColumnName="WorkHours" />
+                <ScalarProperty Name="LeaveHours" ColumnName="LeaveHours" />
+                <ScalarProperty Name="Payday" ColumnName="Payday" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalaryLog">
+            <EntityTypeMapping TypeName="DBModel.SalaryLog">
+              <MappingFragment StoreEntitySet="SalaryLog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="BeforeSalary" ColumnName="BeforeSalary" />
+                <ScalarProperty Name="AfterSalary" ColumnName="AfterSalary" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
